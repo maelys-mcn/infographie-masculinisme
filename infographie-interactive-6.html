@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les 6 Techniques de Manipulation - Version Interactive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo+Black&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            color: #ff3333;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 15px;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: #999;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .instruction {
+            font-size: 0.85rem;
+            color: #ff6633;
+            font-style: italic;
+            margin-top: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .card-container {
+            animation: fadeInUp 0.8s ease backwards;
+            display: flex;
+        }
+
+        .card-container:nth-child(1) { animation-delay: 0.1s; }
+        .card-container:nth-child(2) { animation-delay: 0.2s; }
+        .card-container:nth-child(3) { animation-delay: 0.3s; }
+        .card-container:nth-child(4) { animation-delay: 0.4s; }
+        .card-container:nth-child(5) { animation-delay: 0.5s; }
+        .card-container:nth-child(6) { animation-delay: 0.6s; }
+
+        .card {
+            background: linear-gradient(145deg, #222, #1a1a1a);
+            border: 2px solid #333;
+            padding: 35px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff3333, #ff6633);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #ff3333;
+            box-shadow: 0 20px 40px rgba(255, 51, 51, 0.2);
+        }
+
+        .card-number {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 4rem;
+            color: rgba(255, 51, 51, 0.15);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            line-height: 1;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+            filter: grayscale(1) brightness(1.5);
+        }
+
+        .card-title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1.3rem;
+            color: #ff3333;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .card-example {
+            font-size: 0.85rem;
+            color: #999;
+            font-style: italic;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #ff3333;
+            margin-top: 15px;
+        }
+
+        .card-example::before {
+            content: '💬 ';
+            margin-right: 5px;
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .toggle-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(255, 99, 51, 0.1);
+            border: 2px solid #ff6633;
+            color: #ff6633;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .toggle-button:hover {
+            background: rgba(255, 99, 51, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-button.active .arrow {
+            transform: rotate(180deg);
+        }
+
+        .counter-argument {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            background: linear-gradient(145deg, #2a1a1a, #1a0a0a);
+            border-left: 4px solid #ff6633;
+            margin-top: 15px;
+        }
+
+        .counter-argument.active {
+            max-height: 600px;
+            padding: 20px;
+        }
+
+        .counter-title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1.2rem;
+            color: #ff6633;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .counter-title::before {
+            content: '❌';
+            font-size: 1.5rem;
+        }
+
+        .counter-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        .counter-content strong {
+            color: #ff6633;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            border-top: 2px solid #333;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .warning-badge {
+            display: inline-block;
+            background: #ff3333;
+            color: #000;
+            padding: 8px 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+        }
+    </style>
+    <script>
+        function toggleCounter(button) {
+            // Ferme tous les autres contre-arguments
+            const allButtons = document.querySelectorAll('.toggle-button');
+            const allCounters = document.querySelectorAll('.counter-argument');
+            
+            allButtons.forEach(btn => {
+                if (btn !== button) {
+                    btn.classList.remove('active');
+                    btn.querySelector('span:first-child').textContent = 'Voir le contre-argument';
+                }
+            });
+            
+            allCounters.forEach(counter => {
+                if (counter !== button.nextElementSibling) {
+                    counter.classList.remove('active');
+                }
+            });
+            
+            // Toggle le contre-argument actuel
+            const counterDiv = button.nextElementSibling;
+            const isActive = button.classList.contains('active');
+            
+            if (isActive) {
+                button.classList.remove('active');
+                counterDiv.classList.remove('active');
+                button.querySelector('span:first-child').textContent = 'Voir le contre-argument';
+            } else {
+                button.classList.add('active');
+                counterDiv.classList.add('active');
+                button.querySelector('span:first-child').textContent = 'Masquer le contre-argument';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Les 6 Techniques<br>de Manipulation</h1>
+            <p class="subtitle">Décoder les stratégies des influenceurs masculinistes</p>
+        </div>
+
+        <div class="grid">
+            <!-- Carte 1 -->
+            <div class="card-container">
+                <div class="card">
+                    <span class="card-number">01</span>
+                        <span class="card-icon">🔬</span>
+                        <h2 class="card-title">Fausse Science</h2>
+                        <p class="card-description">
+                            Présentation d'opinions personnelles comme des faits scientifiques incontestables. Utilisation de statistiques sorties de leur contexte ou d'études inexistantes.
+                        </p>
+                        <div class="card-example">
+                            "Les femmes sont biologiquement programmées pour chercher un homme dominant"
+                        </div>
+                    <div class="spacer"></div>
+                    <button class="toggle-button" onclick="toggleCounter(this)">
+                        <span>Voir le contre-argument</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="counter-argument">
+                        <h3 class="counter-title">FAUX</h3>
+                        <p class="counter-content">
+                            <strong>Aucune étude n'a prouvé cela.</strong> Les recherches en psychologie évolutive contemporaine montrent que les préférences de partenaires varient massivement selon les cultures et les contextes socio-économiques. 
+                            <br><br>
+                            Ce que ces influenceurs présentent comme de la "biologie" sont en réalité des stéréotypes sociaux déguisés en science.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte 2 -->
+            <div class="card-container">
+                <div class="card">
+                    <span class="card-number">02</span>
+                    <span class="card-icon">😢</span>
+                    <h2 class="card-title">Victimisation</h2>
+                    <p class="card-description">
+                        Construction d'un récit où les hommes seraient les vraies victimes d'un système dominé par le féminisme. Inversion de la réalité des rapports de pouvoir.
+                    </p>
+                    <div class="card-example">
+                        "Les hommes sont devenus les opprimés de la société moderne, on n'a plus le droit de rien dire"
+                    </div>
+                    <div class="spacer"></div>
+                    <button class="toggle-button" onclick="toggleCounter(this)">
+                        <span>Voir le contre-argument</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="counter-argument">
+                        <h3 class="counter-title">FAUX</h3>
+                        <p class="counter-content">
+                            En France, les hommes représentent 75% des sans-abri, 3× plus de suicides que les femmes, et sont majoritaires dans les métiers dangereux (BTP, industrie). <strong>Ces chiffres sont réels</strong> mais ils existaient bien avant le féminisme et les mouvements pour l'égalité.
+                            <br><br>
+                            Ce ne sont pas les droits gagnés par les femmes qui ont créé ces inégalités masculines. Ce sont des problèmes structurels qui nécessitent de vraies politiques publiques, pas un bouc émissaire.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte 3 -->
+            <div class="card-container">
+                <div class="card">
+                    <span class="card-number">03</span>
+                    <span class="card-icon">⚡</span>
+                    <h2 class="card-title">Simplification</h2>
+                    <p class="card-description">
+                        Réduction de problèmes sociaux complexes à des explications binaires et simplistes. Désignation d'un bouc émissaire unique.
+                    </p>
+                    <div class="card-example">
+                        "Tous tes problèmes viennent du féminisme. C'est aussi simple que ça."
+                    </div>
+                    <div class="spacer"></div>
+                    <button class="toggle-button" onclick="toggleCounter(this)">
+                        <span>Voir le contre-argument</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="counter-argument">
+                        <h3 class="counter-title">FAUX</h3>
+                        <p class="counter-content">
+                            Les difficultés des jeunes hommes (décrochage scolaire, isolement, chômage) sont documentées et <strong>multifactorielles</strong> : précarité économique, système éducatif inadapté, désertification des liens sociaux.
+                            <br><br>
+                            Le rapport de l'OCDE (2015) <em>The ABC of Gender Equality in Education</em> identifie des causes structurelles sans lien avec le féminisme.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte 4 -->
+            <div class="card-container">
+                <div class="card">
+                    <span class="card-number">04</span>
+                    <span class="card-icon">💎</span>
+                    <h2 class="card-title">Promesse Miracle</h2>
+                    <p class="card-description">
+                        Vente de solutions rapides et magiques à des insécurités profondes. Transformation complète de vie promise en quelques semaines moyennant paiement.
+                    </p>
+                    <div class="card-example">
+                        "Deviens un mâle alpha en 30 jours avec ma formation à 997€. Résultats garantis !"
+                    </div>
+                    <div class="spacer"></div>
+                    <button class="toggle-button" onclick="toggleCounter(this)">
+                        <span>Voir le contre-argument</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="counter-argument">
+                        <h3 class="counter-title">FAUX</h3>
+                        <p class="counter-content">
+                            La psychologie du développement personnel montre qu'un changement comportemental durable nécessite <strong>en moyenne 66 jours</strong> selon une étude de Phillippa Lally (University College London, 2010) et cela sans payer.
+                            <br><br>
+                            Ces formations exploitent les biais cognitifs (urgence, appartenance, peur du manque) documentés par Cialdini dans <em>Influence</em>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte 5 -->
+            <div class="card-container">
+                <div class="card">
+                    <span class="card-number">05</span>
+                    <span class="card-icon">🎯</span>
+                    <h2 class="card-title">Ennemi Commun</h2>
+                    <p class="card-description">
+                        Création d'un groupe externe à blâmer pour tous les maux. Construction d'une identité de groupe basée sur l'opposition et la haine.
+                    </p>
+                    <div class="card-example">
+                        "Les femmes et les féministes détruisent notre société. Il faut se défendre ensemble."
+                    </div>
+                    <div class="spacer"></div>
+                    <button class="toggle-button" onclick="toggleCounter(this)">
+                        <span>Voir le contre-argument</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="counter-argument">
+                        <h3 class="counter-title">FAUX</h3>
+                        <p class="counter-content">
+                            Les chiffres disent l'inverse : les hommes qui ont des relations sociales avec des femmes (couple, amitié, famille) vivent <strong>en moyenne 5 ans de plus</strong> que les hommes isolés (INSEE, 2021).
+                            <br><br>
+                            L'isolement masculin est aujourd'hui reconnu comme une crise de santé publique en France.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte 6 -->
+            <div class="card-container">
+                <div class="card">
+                    <span class="card-number">06</span>
+                    <span class="card-icon">🔐</span>
+                    <h2 class="card-title">Vocabulaire Codé</h2>
+                    <p class="card-description">
+                        Utilisation d'un jargon spécifique qui crée un sentiment d'appartenance à une communauté "éclairée". Marqueur d'initiation progressive.
+                    </p>
+                    <div class="card-example">
+                        "T'es encore bluepill ? Faut te redpill mec, arrête d'être un beta..."
+                    </div>
+                    <div class="spacer"></div>
+                    <button class="toggle-button" onclick="toggleCounter(this)">
+                        <span>Voir le contre-argument</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="counter-argument">
+                        <h3 class="counter-title">FAUX</h3>
+                        <p class="counter-content">
+                            L'utilisation d'un langage initiatique est une <strong>technique d'endoctrinement documentée</strong> dans les études sur les sectes (Robert Lifton, 1961 : chargement du langage).
+                            <br><br>
+                            L'ADL (Anti-Defamation League) et le GIFCT ont répertorié ce vocabulaire comme marqueur de radicalisation progressive en ligne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="warning-badge">⚠️ Vigilance</div>
+            <p class="footer-text">
+                Ces techniques visent à créer une dépendance émotionnelle et financière.<br>
+                Reconnaître ces mécanismes est la première étape pour s'en protéger.<br>
+                <strong>Le sport et le développement personnel ne nécessitent pas de discours haineux.</strong>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
